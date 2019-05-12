@@ -38,8 +38,8 @@ boek_hoogte = 250;
 boek_diepte = 180;
 cd_hoogte = 125;
 cd_diepte = 142;
-cd_marge_h = 30;
-cd_marge_d = 10;
+cd_marge_h = 15;
+cd_marge_d = 5;
 
 
 
@@ -114,95 +114,12 @@ color([.2,.2,.2,.5]) {
 
 
 // cd rek
-/*
-translate([0,200,200]){
-    max_breedte = 1000;
-    rotate([45,0,0]){
-        translate([-5,0,0]){
-            color([0,1,1,1]) cube([10,max_breedte,10]);
-        }
-    }
-    
-    eenheid = cd_hoogte + cd_marge_h;
-    eenheidsvak = [cd_diepte + cd_marge_d,eenheid,eenheid];
-    
-    kleur_l3_hor = [1,0,0,.5];
-    kleur_l3_ver = [1,0,1,.5];
-    kleur_l1_ver = [1,1,0,.5];
-    kleur_3 = [0,1,1,1];
-    
-    // platen van 3 eenheden: rijen 0,1,2,3,6 (volle lengte, de kolommen zijn inliggende maten)
-    color(kleur_l3_hor) { 
-        for(i = [0,1,2,3]) {
-            translate([0, i * eenheidsvak.y, eenheidsvak.y * i]){
-                cube([eenheid, eenheid * 3, mdf_dikte]);
-            }
-        }
-        translate([0, eenheidsvak.y * 3, eenheidsvak.y * 6]){
-            cube([eenheidsvak.x, eenheidsvak.y * 3, mdf_dikte]);
-        }
-    }
-    
-    // platen van 3 vertikaal: kolommen 0,4,6 (lengte is 3 eenheden - 2*dikte mdf)
-    color(kleur_l3_ver) {
-        
-        lengte_v3 = eenheid*3 - mdf_dikte;        
-
-        translate(trans_cd(0,0)){ cd_plank(lengte_v3); }
-        translate(trans_cd(3,0)){ cd_plank(lengte_v3); }
-    }
-
-        
-    // plaatjes van 1, grootte = cd hoogte + marge = cd_vak
-    color(kleur_l1_ver) {    
-        for(i = [0:2]) {
-            translate([0,i*eenheidsvak.y,i*eenheidsvak.y]){    
-                translate([0,eenheidsvak.y*3-mdf_dikte,mdf_dikte]){
-                    cube([eenheidsvak.x, mdf_dikte, eenheidsvak.y - mdf_dikte]);
-                }
-            }
-        }
-    }
-    
-    teken_cds(0,0,1,0);
-    teken_cds(eenheid + mdf_dikte,0,0);
-    # teken_cds(2*eenheid + mdf_dikte,0,0);
-    
-}
-*/
-teken_cd_rek();
-
-
-module plank_h3(r,k) {
-    x = cd_diepte + cd_marge_d;
-    y = 3*(cd_hoogte + cd_marge) + 3*mdf_dikte;
-    z = mdf_dikte;
-    offset_x = 0;
-    offset_y = 0;
-}
-
-module cd_plank(lengte) { 
-    eenheid = cd_hoogte + cd_marge_h;
-    cube([eenheid,mdf_dikte,lengte]); 
-}
-
-function trans_cd(r,k) = 
-    let (eenheid = cd_hoogte + cd_marge_h)
-    let (ofset_y = r * (eenheid+mdf_dikte))
-    [r*(eenheid+mdf_dikte),ofset_y,r*eenheid+mdf_dikte];
-
-module teken_cds(y,z,r,l) {
-    unit_box = [cd_diepte + cd_marge_d,cd_hoogte + cd_marge_h,cd_hoogte + cd_marge_h];
-    cd_box = [cd_diepte,cd_hoogte+cd_marge_h,cd_hoogte];
-    unit_color = [181/255, 175/255, 247/255,.2];
-    cd_color = [196/255, 93/255, 252/255, 1];
-    translate([0,y+r*(cd_hoogte + cd_marge_h),z+mdf_dikte]){
-        rotate([r*90,0,0]) {
-            //color(unit_color) cube(unit_box);
-            color(cd_color) cube(cd_box);
-        }
+translate([0,kamer.y - 1100,kamer.z-1000]) {
+    rotate([-45,0,0]){
+        teken_cd_rek();
     }
 }
+
 
 
 module teken_cd_rek() {
@@ -214,27 +131,24 @@ module teken_cd_rek() {
         teken_hoek_module(i);
     }
     //afsluitend hoekje
-    
-    
-
-    
+    teken_afsluitend_hoekje(n_hoeken);
     
     /*
     * lijn trekken om de maximale breedte te zien
     */
-    teken_max_breedte(1000);
+    //teken_max_breedte(1000);
     
     /*
     * cd blokken tekenen om te zien of alles past
     */
-    teken_cds();
+    //teken_cds();
     
     /*
     * helperfunties en -modules
     */
     module teken_hoek_module(n) {
         l4 = 4*cdvak.y + 2*mdf_dikte;   // lengte plank van 4 eenheden
-        l5 = 5*cdvak.y + 2*mdf_dikte;   // lengte plank van 4 eenheden
+        l5 = 5*cdvak.y + 2*mdf_dikte;   // lengte plank van 5 eenheden
         l1 = cdvak.y;                   // inliggend plankje van 1 eenheid
         
         translate([0,n*(mdf_dikte+cdvak.y),n*(mdf_dikte+cdvak.z)]) {
@@ -263,7 +177,41 @@ module teken_cd_rek() {
         
     }
     
+    module teken_afsluitend_hoekje(n_hoeken) {
 
+        translate([ 0,
+                    (n_hoeken-1) * cdvak.y + n_hoeken * mdf_dikte,
+                    n_hoeken * mdf_dikte + n_hoeken * cdvak.z]) 
+        {
+            l = 4*cdvak.y + mdf_dikte;
+            cube([cdvak.x,l,mdf_dikte]);
+        }
+        
+        translate([ 0,
+                    n_hoeken * cdvak.y + n_hoeken * mdf_dikte,
+                    (n_hoeken+1) * mdf_dikte + n_hoeken * cdvak.z]) 
+        {
+            l = 3*cdvak.y + mdf_dikte;
+            cube([cdvak.x,mdf_dikte,l]);
+        }
+        
+        translate([ 0,
+                    n_hoeken * cdvak.y + (n_hoeken+1) * mdf_dikte,
+                    (n_hoeken+1) * (mdf_dikte + cdvak.z)]) 
+        {
+            l = cdvak.y + mdf_dikte;
+            cube([cdvak.x,l,mdf_dikte]);
+        }
+        
+        translate([ 0,
+                    (n_hoeken+1) * (cdvak.y + mdf_dikte),
+                    (n_hoeken+1) * mdf_dikte + n_hoeken * cdvak.z]) 
+        {
+            l = cdvak.y;
+            cube([cdvak.x,mdf_dikte,l]);
+        }
+
+    }
     
     
     module teken_max_breedte(max_l) {
