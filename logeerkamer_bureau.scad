@@ -29,13 +29,15 @@ werkblad = [1920,700,40];
 werkhoogte = 730;
 
 //schabben hoog
-plint_plafond_hoogte = 10;
-stripboek_hoogte = 294;
+plint_plafond_hoogte = 140;
+stripboek_hoogte = 315;
 stripboek_hoogte_marge = 20;
-stripboek_diepte = 223;
+stripboek_diepte = 225;
 stripboek_diepte_marge = 20;
 boek_hoogte = 250;
-boek_diepte = 180;
+boek_diepte = 170;
+boek_hoogte_marge = 20;
+boek_diepte_marge = 20;
 cd_hoogte = 125;
 cd_diepte = 142;
 cd_marge_h = 15;
@@ -118,6 +120,11 @@ translate([0,kamer.y - 1100,kamer.z-1000]) {
     rotate([-45,0,0]){
         teken_cd_rek();
     }
+}
+
+//wandkasten
+translate([0,0,kamer.z]){
+    teken_wand_kast();
 }
 
 
@@ -262,7 +269,33 @@ module teken_cd_rek() {
         }
     }
 }
- 
+
+module teken_wand_kast() {
+    //van boven naar beneden: plint - strips - boeken - boeken - boeken
+    teken_plint();
+    teken_strip_module(1);
+    
+    
+    module teken_plint(){
+        x = mdf_dikte;
+        y = stripboek_diepte + stripboek_diepte_marge - mdf_dikte;
+        z = -plint_plafond_hoogte;
+        translate([x,y,z]){
+            cube([kamer.x - 2*mdf_dikte, mdf_dikte,plint_plafond_hoogte]);
+        }
+    }
+    
+    module teken_strip_module(vakken) {
+        h = stripboek_hoogte + stripboek_hoogte_marge;
+        b = kamer.x;
+        d = stripboek_diepte + stripboek_diepte_marge;
+        
+        translate([0,0,-plint_plafond_hoogte-h]){
+        
+            cube([b,d,h]);
+        }
+    }
+}
 
 
 
