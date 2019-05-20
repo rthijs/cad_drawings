@@ -7,7 +7,7 @@ plint_d = 10;
 // allerlei
 mdf_dikte = 18;
 ooghoogte = 1270;
-armafstand = 450;
+armafstand = 400;
 
 // toetsenbord + muis
 toetsenbord = [460,160,30];
@@ -25,11 +25,11 @@ synth_h = 650;
 midi = [940,270,90];
 
 // werkblad
-werkblad = [1920,700,40];
+werkblad = [1920,800,40];
 werkhoogte = 730;
 
 //schabben hoog
-plint_plafond_hoogte = 140;
+plint_plafond_hoogte = 60;
 stripboek_hoogte = 315;
 stripboek_hoogte_marge = 20;
 stripboek_diepte = 225;
@@ -38,6 +38,8 @@ boek_hoogte = 250;
 boek_diepte = 170;
 boek_hoogte_marge = 20;
 boek_diepte_marge = 20;
+klein_boek_hoogte = 180;
+klein_boek_hoogte_marge = 0;
 cd_hoogte = 125;
 cd_diepte = 142;
 cd_marge_h = 15;
@@ -85,7 +87,7 @@ color([.2,.2,.2,.5]) {
 {
     translate([0,0,werkhoogte]){
        translate([  werkblad.x/2-toetsenbord.x/2,
-                    werkblad.y-toetsenbord.y-300,
+                    werkblad.y-toetsenbord.y-250,
                     0]){
             # cube(toetsenbord);
             translate([-150,40,0]){
@@ -122,9 +124,14 @@ translate([0,kamer.y - 1100,kamer.z-1000]) {
     }
 }
 
-//wandkasten
+//wandkasten -> stripboeken
 translate([0,0,kamer.z]){
     teken_wand_kast();
+}
+
+//wandkast -> boekenrek
+translate([0,0,kamer.z - (plint_plafond_hoogte + 2*mdf_dikte + stripboek_hoogte + stripboek_hoogte_marge) - mdf_dikte]){
+    teken_boekenkast();
 }
 
 
@@ -329,6 +336,53 @@ module teken_wand_kast() {
         translate([0,mdf_dikte,-plint_plafond_hoogte-h-mdf_dikte]){
             #cube([b,d,h]);
         }
+    }
+}
+
+module teken_boekenkast(){
+    h = boek_hoogte + boek_hoogte_marge;
+    b = kamer.x * 0.8;
+    d = boek_diepte + boek_diepte_marge;
+    
+    x = kamer.x/2-b/2;
+    
+    //eerste rij boeken
+    translate([x,mdf_dikte,-h]){
+        //#cube([b,d,h]);
+    }
+    //tweede rij boeken
+    translate([x,mdf_dikte,-(2*h + mdf_dikte)]){
+        //#cube([b,d,h]);
+    }
+    
+    //achterwand
+    translate([x,0,-(2*h+mdf_dikte)]){
+        cube([b,mdf_dikte,2*h+mdf_dikte]);
+    }
+    
+    //bovenste plank
+    translate([x,0,0]){
+        cube([b,d+mdf_dikte,mdf_dikte]);
+    }
+    
+    //middelste plank
+    translate([x,mdf_dikte,-(h+mdf_dikte)]){
+        cube([b,d,mdf_dikte]);
+    }
+    
+    //onderste plank
+    translate([x,0,-2*(h+mdf_dikte)]){
+        cube([b,d+mdf_dikte,mdf_dikte]);
+    }
+    
+    //linkerkant
+    translate([x-mdf_dikte,0,-2*(h+mdf_dikte)]){
+        cube([mdf_dikte,d+mdf_dikte,3*mdf_dikte + 2*h]);
+    }
+    
+    //rechterkant
+    translate([x+b,0,-2*(h+mdf_dikte)]){
+        cube([mdf_dikte,d+mdf_dikte,3*mdf_dikte + 2*h]);
     }
 }
 
