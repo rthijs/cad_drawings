@@ -271,17 +271,25 @@ module teken_cd_rek() {
 }
 
 module teken_wand_kast() {
+    //teken_boeken();
     //van boven naar beneden: plint - strips - boeken - boeken - boeken
     teken_plint();
     teken_strip_module(1);
     
     
     module teken_plint(){
-        x = mdf_dikte;
+        x = 0;
         y = stripboek_diepte + stripboek_diepte_marge - mdf_dikte;
         z = -plint_plafond_hoogte;
-        translate([x,y,z]){
-            cube([kamer.x - 2*mdf_dikte, mdf_dikte,plint_plafond_hoogte]);
+        
+        //voorkant
+        translate([x,y+mdf_dikte,z]){
+            cube([kamer.x, mdf_dikte,plint_plafond_hoogte]);
+        }
+        
+        //zijkant
+        translate([kamer.x-mdf_dikte,0,z]){
+            cube([mdf_dikte, y+mdf_dikte,plint_plafond_hoogte]);
         }
     }
     
@@ -290,9 +298,36 @@ module teken_wand_kast() {
         b = kamer.x;
         d = stripboek_diepte + stripboek_diepte_marge;
         
-        translate([0,0,-plint_plafond_hoogte-h]){
+        //achterwand
+        translate([mdf_dikte,0,-plint_plafond_hoogte-h-mdf_dikte]){
+            cube([b-2*mdf_dikte,mdf_dikte,h]);
+        }
         
-            cube([b,d,h]);
+        //onderste plank
+        translate([0,0,-plint_plafond_hoogte-h-2*mdf_dikte]){
+            cube([b,d+mdf_dikte,mdf_dikte]);
+        }
+        
+        //bovenste plank
+        translate([0,0,-plint_plafond_hoogte-mdf_dikte]){
+            cube([b,d+mdf_dikte,mdf_dikte]);
+        }
+        
+        //zijkanten
+        translate([0,0,-plint_plafond_hoogte-h-mdf_dikte]){
+            cube([mdf_dikte,d+mdf_dikte,h]);
+        }
+        translate([kamer.x-mdf_dikte,0,-plint_plafond_hoogte-h-mdf_dikte]){
+            cube([mdf_dikte,d+mdf_dikte,h]);
+        }
+    }
+    
+    module teken_boeken(){
+        h = stripboek_hoogte + stripboek_hoogte_marge;
+        b = kamer.x;
+        d = stripboek_diepte + stripboek_diepte_marge;
+        translate([0,mdf_dikte,-plint_plafond_hoogte-h-mdf_dikte]){
+            #cube([b,d,h]);
         }
     }
 }
