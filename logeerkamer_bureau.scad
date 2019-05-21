@@ -45,6 +45,9 @@ cd_diepte = 142;
 cd_marge_h = 15;
 cd_marge_d = 5;
 
+smaller_factor = 0.8;
+foto_plank_diepte = 50;
+
 
 
 
@@ -134,6 +137,10 @@ translate([0,0,kamer.z - (plint_plafond_hoogte + 2*mdf_dikte + stripboek_hoogte 
     teken_boekenkast();
 }
 
+//fotoplankje
+translate([0,0,werkhoogte+600]){
+    teken_foto_plank();
+}
 
 
 module teken_cd_rek() {
@@ -341,7 +348,7 @@ module teken_wand_kast() {
 
 module teken_boekenkast(){
     h = boek_hoogte + boek_hoogte_marge;
-    b = kamer.x * 0.8;
+    b = kamer.x * smaller_factor;
     d = boek_diepte + boek_diepte_marge;
     
     x = kamer.x/2-b/2;
@@ -386,6 +393,24 @@ module teken_boekenkast(){
     }
 }
 
+module teken_foto_plank(){    
+    h = mdf_dikte;
+    b = kamer.x * smaller_factor;
+    d = foto_plank_diepte;
+    
+    x = kamer.x/2-b/2;
+    difference(){
+        //plankje
+        translate([x,0,-2*(h+mdf_dikte)]){
+            cube([b,d,h]);
+        }
+        
+        //goot frezen
+        translate([x,foto_plank_diepte - 10 ,-2*(h+mdf_dikte)+(mdf_dikte - 5)]){
+            cube([b,5,5]);
+        }
+    }
+}
 
 
 
