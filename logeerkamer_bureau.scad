@@ -26,7 +26,10 @@ midi = [940,270,90];
 
 // werkblad
 werkblad = [1920,800,40];
-werkhoogte = 730;
+werkhoogte = 760;
+
+//3D printer
+3D_printer = [500,600,500];
 
 //schabben hoog
 plint_plafond_hoogte = 60;
@@ -101,14 +104,16 @@ color([.2,.2,.2,.5]) {
 }
 
 // midi
-/*
 {
-    translate([ werkblad.x/2-midi.x/2,0,werkhoogte]){
+    translate([ werkblad.x/2-midi.x/2,werkblad.y-midi.y,werkhoogte-werkblad.z-midi.z]){
         # cube(midi);
     }
 }
-*/
 
+// 3D printer
+translate([mdf_dikte,mdf_dikte,werkhoogte-werkblad.z-3D_printer.z-mdf_dikte]){
+        # cube(3D_printer);
+}
 
 
 
@@ -138,7 +143,7 @@ translate([0,0,kamer.z - (plint_plafond_hoogte + 2*mdf_dikte + stripboek_hoogte 
 }
 
 //fotoplankje
-translate([0,0,werkhoogte+600]){
+translate([0,0,werkhoogte+550]){
     teken_foto_plank();
 }
 
