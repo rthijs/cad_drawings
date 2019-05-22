@@ -29,7 +29,7 @@ werkblad = [1920,800,40];
 werkhoogte = 760;
 
 //3D printer
-3D_printer = [450,500,450];
+3D_printer = [450,600,450];
 
 //schabben hoog
 plint_plafond_hoogte = 60;
@@ -146,7 +146,7 @@ translate([3D_printer.y+2*mdf_dikte,0,plint_h]){
         teken_printer_kast();
     }
 }
-
+    
 
 module teken_cd_rek() {
     n_hoeken = 3; // aantal hoekvormige modules in het rek
@@ -431,9 +431,11 @@ module teken_printer_kast(){
         cube([3D_printer.x + 2*mdf_dikte,3D_printer.y + 2*mdf_dikte, mdf_dikte]);
     }
     //links (deur)
-    translate([3D_printer.x+mdf_dikte,mdf_dikte,mdf_dikte]){
-        rotate(a=-30, v=[0,0,1]){
-            cube([mdf_dikte,3D_printer.y, 3D_printer.z]);
+    translate([3D_printer.x+mdf_dikte,3D_printer.y,mdf_dikte]){
+        rotate(a=60, v=[0,0,1]){
+            translate([0,-3D_printer.y,0]){
+                cube([mdf_dikte,3D_printer.y, 3D_printer.z]);
+            }
         }
     }
     //rechts
