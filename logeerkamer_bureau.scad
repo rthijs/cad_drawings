@@ -105,7 +105,7 @@ color([.2,.2,.2,.5]) {
 
 // midi
 {
-    translate([ werkblad.x/2-midi.x/2,werkblad.y-midi.y,werkhoogte-werkblad.z-midi.z]){
+    translate([ werkblad.x/2-midi.x/2,werkblad.y-midi.y,werkhoogte-werkblad.z-midi.z-10]){
         # cube(midi);
     }
 }
@@ -146,7 +146,11 @@ translate([3D_printer.y+2*mdf_dikte,0,plint_h]){
         teken_printer_kast();
     }
 }
-    
+  
+// midi lade
+translate([werkblad.x/2-midi.x/2,werkblad.y-midi.y,werkhoogte-werkblad.z-midi.z-mdf_dikte-10]){
+    teken_midi_lade();
+}
 
 module teken_cd_rek() {
     n_hoeken = 3; // aantal hoekvormige modules in het rek
@@ -452,4 +456,7 @@ module teken_printer_kast(){
     }
 }
 
+module teken_midi_lade(){
+    cube([midi.x,midi.y,mdf_dikte]);
+}
 
