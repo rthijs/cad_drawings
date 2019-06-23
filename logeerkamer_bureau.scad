@@ -139,13 +139,6 @@ translate([0,0,kamer.z - (plint_plafond_hoogte + 2*mdf_dikte + stripboek_hoogte 
 translate([0,0,werkhoogte+550]){
     teken_foto_plank();
 }
-
-// printer kast
-translate([3D_printer.y+2*mdf_dikte,0,plint_h]){
-    rotate([0,0,90]){
-        teken_printer_kast();
-    }
-}
   
 // midi lade
 translate([werkblad.x/2-midi.x/2,werkblad.y-midi.y,werkhoogte-werkblad.z-midi.z-mdf_dikte-10]){
@@ -360,6 +353,10 @@ module teken_boekenkast(){
     b = kamer.x * smaller_factor;
     d = boek_diepte + boek_diepte_marge;
     
+    echo(h);
+    echo(b);
+    echo(d);
+    
     x = kamer.x/2-b/2;
     
     //eerste rij boeken
@@ -418,41 +415,6 @@ module teken_foto_plank(){
         translate([x,foto_plank_diepte - 10 ,-2*(h+mdf_dikte)+(mdf_dikte - 5)]){
             cube([b,5,5]);
         }
-    }
-}
-
-module teken_printer_kast(){
-    // 3D printer
-    translate([mdf_dikte,mdf_dikte,mdf_dikte]){
-            color("blue",.5) cube(3D_printer);
-    }
-    //onder
-    translate([0,0,0]){
-        cube([3D_printer.x + 2*mdf_dikte,3D_printer.y + 2*mdf_dikte, mdf_dikte]);
-    }
-    //boven
-    translate([0,0,3D_printer.z+mdf_dikte]){
-        cube([3D_printer.x + 2*mdf_dikte,3D_printer.y + 2*mdf_dikte, mdf_dikte]);
-    }
-    //links (deur)
-    translate([3D_printer.x+mdf_dikte,3D_printer.y,mdf_dikte]){
-        rotate(a=60, v=[0,0,1]){
-            translate([0,-3D_printer.y,0]){
-                cube([mdf_dikte,3D_printer.y, 3D_printer.z]);
-            }
-        }
-    }
-    //rechts
-    translate([0,mdf_dikte,mdf_dikte]){
-        cube([mdf_dikte,3D_printer.y, 3D_printer.z]);
-    }
-    //achter
-    translate([0,0,mdf_dikte]){
-        cube([3D_printer.x + 2*mdf_dikte,mdf_dikte, 3D_printer.z]);
-    }
-    //voor
-    translate([0,3D_printer.y+mdf_dikte,mdf_dikte]){
-        cube([3D_printer.x + 2*mdf_dikte,mdf_dikte, 3D_printer.z]);
     }
 }
 
